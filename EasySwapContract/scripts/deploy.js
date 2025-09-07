@@ -16,12 +16,15 @@ async function main() {
   // let esVault = await ethers.getContractFactory("EasySwapVault")
   // esVault = await upgrades.deployProxy(esVault, { initializer: 'initialize' });
   // await esVault.deployed()
+  // //打印出代理合约部署地址
   // console.log("esVault contract deployed to:", esVault.address)
+  // //打印出可升级合约的实现地址
   // console.log(await upgrades.erc1967.getImplementationAddress(esVault.address), " esVault getImplementationAddress")
+  // 打印出admin地址，admin地址是合约部署者，admin地址可以升级合约，外部合约调用订单簿的方法需要使用admin地址
   // console.log(await upgrades.erc1967.getAdminAddress(esVault.address), " esVault getAdminAddress")
 
   // newProtocolShare = 200;
-  // newESVault = "0xaD65f3dEac0Fa9Af4eeDC96E95574AEaba6A2834";
+  // newESVault = "0x9BAa8597b54fEE7Af2DEDEE66F9133EB61C2F058";
   // EIP712Name = "EasySwapOrderBook";
   // EIP712Version = "1";
   // let esDex = await ethers.getContractFactory("EasySwapOrderBook")
@@ -31,8 +34,8 @@ async function main() {
   // console.log(await upgrades.erc1967.getImplementationAddress(esDex.address), " esDex getImplementationAddress")
   // console.log(await upgrades.erc1967.getAdminAddress(esDex.address), " esDex getAdminAddress")
 
-  esDexAddress = "0xcEE5AA84032D4a53a0F9d2c33F36701c3eAD5895"
-  esVaultAddress = "0xaD65f3dEac0Fa9Af4eeDC96E95574AEaba6A2834"
+  esDexAddress = "0xae0e4320086F06813C7a10C4f3616228e3454723"
+  esVaultAddress = "0x9BAa8597b54fEE7Af2DEDEE66F9133EB61C2F058"
   const esVault = await (
     await ethers.getContractFactory("EasySwapVault")
   ).attach(esVaultAddress)

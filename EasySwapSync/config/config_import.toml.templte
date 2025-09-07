@@ -31,7 +31,7 @@ host = "127.0.0.1:6379"
 type = "node"
 
 [ankr_cfg]
-api_key=""
+api_key="/8941f513125e63e38a279797b1054fcbc8538e16689197872bd38cf3b6c0f8d6"
 https_url="https://rpc.ankr.com/eth_sepolia"
 #https_url="https://rpc.ankr.com/optimism"
 
@@ -42,4 +42,5 @@ id=11155111
 [contract_cfg]
 eth_address = "0x0000000000000000000000000000000000000000"
 weth_address = "0x4200000000000000000000000000000000000006"
-dex_address = "0x5560e1c2E0260c2274e400d80C30CDC4B92dC8ac" # undeploy
+#0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9
+dex_address = "0xae0e4320086F06813C7a10C4f3616228e3454723" # undeploy

@@ -94,3 +94,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/mysql v1.5.1 // indirect
 )
+
+replace github.com/ProjectsTask/EasySwapBase => ../EasySwapBase

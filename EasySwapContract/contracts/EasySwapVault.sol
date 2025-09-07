@@ -8,6 +8,7 @@ import {LibOrder, OrderKey} from "./libraries/LibOrder.sol";
 
 import {IEasySwapVault} from "./interface/IEasySwapVault.sol";
 
+//该合约是easy swap的vault合约，用于存储订单的ETH和NFT
 contract EasySwapVault is IEasySwapVault, OwnableUpgradeable {
     using LibTransferSafeUpgradeable for address;
     using LibTransferSafeUpgradeable for IERC721;
@@ -127,7 +128,7 @@ contract EasySwapVault is IEasySwapVault, OwnableUpgradeable {
             );
         }
     }
-
+    //必须实现这个方法，不然无法接收NFT
     function onERC721Received(
         address,
         address,
@@ -136,7 +137,7 @@ contract EasySwapVault is IEasySwapVault, OwnableUpgradeable {
     ) public virtual returns (bytes4) {
         return this.onERC721Received.selector;
     }
-
+    //必须实现这个方法，不然无法接收eth
     receive() external payable {}
 
     uint256[50] private __gap;

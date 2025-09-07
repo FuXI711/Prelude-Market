@@ -2,28 +2,29 @@ version: '3.8'
 
 services:
   mysql:
-    image: arm64v8/mysql:8.0
+    image: mysql:8.0  # 使用官方镜像，不需要arm64
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: rootpasswd
       MYSQL_DATABASE: easyswap
       MYSQL_USER: easyuser
       MYSQL_PASSWORD: easypasswd
+      MYSQL_HOST: '%'  # 允许所有主机连接
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
-    platform: linux/arm64
+    # 移除 platform 行
 
   redis:
-    image: arm64v8/redis:6.2
+    image: redis:6.2-alpine  # 使用标准镜像
     container_name: redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    platform: linux/arm64
+    # 移除 platform 行
 
 volumes:
   mysql_data:

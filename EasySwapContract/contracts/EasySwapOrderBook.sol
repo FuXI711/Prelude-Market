@@ -33,6 +33,7 @@ contract EasySwapOrderBook is
     using LibTransferSafeUpgradeable for address;
     using LibTransferSafeUpgradeable for IERC721;
 
+    //创建订单日志
     event LogMake(
         OrderKey orderKey,
         LibOrder.Side indexed side,
@@ -43,9 +44,10 @@ contract EasySwapOrderBook is
         uint64 expiry,
         uint64 salt
     );
-
+    //取消订单日志
     event LogCancel(OrderKey indexed orderKey, address indexed maker);
 
+    //匹配订单日志
     event LogMatch(
         OrderKey indexed makeOrderKey,
         OrderKey indexed takeOrderKey,
@@ -54,8 +56,11 @@ contract EasySwapOrderBook is
         uint128 fillPrice
     );
 
+    //提现ETH日志 
     event LogWithdrawETH(address recipient, uint256 amount);
+    //批量匹配内部错误日志
     event BatchMatchInnerError(uint256 offset, bytes msg);
+    //跳过订单日志
     event LogSkipOrder(OrderKey orderKey, uint64 salt);
 
     modifier onlyDelegateCall() {
@@ -80,9 +85,13 @@ contract EasySwapOrderBook is
         string memory EIP712Version
     ) public initializer {
         __EasySwapOrderBook_init(
+            //协议费分成，1000=10%
             newProtocolShare,
+            //vault地址
             newVault,
+            //EIP712Name
             EIP712Name,
+            //EIP712Version
             EIP712Version
         );
     }
@@ -93,20 +102,7 @@ contract EasySwapOrderBook is
         string memory EIP712Name,
         string memory EIP712Version
     ) internal onlyInitializing {
-        __EasySwapOrderBook_init_unchained(
-            newProtocolShare,
-            newVault,
-            EIP712Name,
-            EIP712Version
-        );
-    }
 
-    function __EasySwapOrderBook_init_unchained(
-        uint128 newProtocolShare,
-        address newVault,
-        string memory EIP712Name,
-        string memory EIP712Version
-    ) internal onlyInitializing {
         __Context_init();
         __Ownable_init(_msgSender());
         __ReentrancyGuard_init();
@@ -116,6 +112,13 @@ contract EasySwapOrderBook is
         __ProtocolManager_init(newProtocolShare);
         __OrderValidator_init(EIP712Name, EIP712Version);
 
+        __EasySwapOrderBook_init_unchained(newVault);
+    }
+
+    //初始化合约
+    function __EasySwapOrderBook_init_unchained(
+        address newVault
+    ) internal onlyInitializing {
         setVault(newVault);
     }
 
@@ -137,6 +140,7 @@ contract EasySwapOrderBook is
         payable
         override
         whenNotPaused
+        // 防止重入攻击
         nonReentrant
         returns (OrderKey[] memory newOrderKeys)
     {
@@ -315,9 +319,10 @@ contract EasySwapOrderBook is
             (order.expiry > block.timestamp || order.expiry == 0) && // expiry must be greater than current block timestamp or no expiry
             filledAmount[LibOrder.hash(order)] == 0 // order cannot be canceled or filled
         ) {
-            newOrderKey = LibOrder.hash(order);
+            newOrderKey = LibOrder.hash(order); 
 
             // deposit asset to vault
+            // 如果订单是列表订单，则将NFT存入vault
             if (order.side == LibOrder.Side.List) {
                 if (order.nft.amount != 1) {
                     // limit list order amount to 1
@@ -329,6 +334,7 @@ contract EasySwapOrderBook is
                     order.nft.collection,
                     order.nft.tokenId
                 );
+            // 如果订单是出价订单，则将ETH存入vault
             } else if (order.side == LibOrder.Side.Bid) {
                 if (order.nft.amount == 0) {
                     return LibOrder.ORDERKEY_SENTINEL;
@@ -338,7 +344,7 @@ contract EasySwapOrderBook is
                     ETHAmount
                 );
             }
-
+        //
             _addOrder(order);
 
             emit LogMake(
@@ -637,6 +643,10 @@ contract EasySwapOrderBook is
     ) external nonReentrant onlyOwner {
         recipient.safeTransferETH(amount);
         emit LogWithdrawETH(recipient, amount);
+    }
+
+       function getVault() external view returns(address){
+        return _vault;
     }
 
     function pause() external onlyOwner {

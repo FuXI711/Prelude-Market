@@ -11,16 +11,19 @@ const { toBn } = require("evm-bn")
       esDex AdminAddress: 
  */
 
+//DEX合约的部署地址
 const esDex_name = "EasySwapOrderBook";
-const esDex_address = "0xcEE5AA84032D4a53a0F9d2c33F36701c3eAD5895"
+const esDex_address = "0xae0e4320086F06813C7a10C4f3616228e3454723"
 
 const esVault_name = "EasySwapVault";
-const esVault_address = "0xaD65f3dEac0Fa9Af4eeDC96E95574AEaba6A2834"
+//VAULT合约的部署地址
+const esVault_address = "0x9BAa8597b54fEE7Af2DEDEE66F9133EB61C2F058"
 
 const erc721_name = "TestERC721"
-const erc721_address = "0xF2e0BA02a187F19F5A390E4f990c684d81A833A0"
+//NFT合约的部署地址
+const erc721_address = "0x3447754d2971f6dccBFB2e2abd00c5d6fb6e3096"
 
-let esDex, esVault, testERC721
+let esDex, esVault, testERC721 
 let deployer
 async function main() {
     [deployer, trader] = await ethers.getSigners()
@@ -44,12 +47,15 @@ async function main() {
     await approvalForVault();
 
     // 2. make order
-    await testMakeOrder();
+    // let tokenId = 49;
+    // await testMakeOrder(tokenId);
 
-    // for (let i = 1; i < 20; i++) {
-    //     await testMakeOrder(i);
-    // }
+    //循环创建订单
+    for (let i = 30; i < 49; i++) {
+        await testMakeOrder(i);
+    }
 
+    //取消订单
     // 3. cancel order
     // let orderKeys = [];
     // await testCancelOrder(orderKeys);
@@ -58,10 +64,11 @@ async function main() {
     // let orderKeys2 = ["0x2f01e4ef5cbea217934b2bb27a73fac35032a75ffb030dea41fdb995c55f3069",
     //     "0x3450ada942fc2595d7d12bd6385cf3f1b03a614b9076bb23adaf808205e49d3b"]
 
+    //取消订单1：单个订单取消，2：批量取消
     // await testCancelOrder(orderKeys1);
     // await testCancelOrder(orderKeys2);
 
-
+    //匹配订单
     // 4. match order 
     // await testMatchOrder();
 

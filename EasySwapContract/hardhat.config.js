@@ -54,12 +54,14 @@ module.exports = {
     //   accounts: [`${MAINNET_PK}`],
     // },
   },
+  //gas消耗报告配置
   gasReporter: {
     currency: "USD",
     enabled: process.env.REPORT_GAS ? true : false,
     excludeContracts: [],
     src: "./contracts",
   },
+  //路径配置
   paths: {
     artifacts: "./artifacts",
     cache: "./cache",
